@@ -1,0 +1,22 @@
+set main-view = id date author commit-title:graph=yes,refs=yes
+set vertical-split = yes
+set split-view-width = 70%
+
+#------------------------------
+# reset keybinds
+#------------------------------
+bind generic G none
+
+#------------------------------
+# configure keybinds
+#------------------------------
+
+# commit
+#------------------------------
+bind status + !git commit --amend
+bind status C !git commit -v
+
+# rebase
+#------------------------------
+bind main R !git rebase -i %(commit)
+bind diff R !git rebase -i %(commit)

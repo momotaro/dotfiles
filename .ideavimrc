@@ -1,0 +1,95 @@
+" basic settings
+"--------------------------------
+"大文字小文字の区別なし
+set ignorecase
+
+"検索時に大文字を含んでいたら大/小を区別
+set smartcase
+
+"検索対象をハイライト
+"ハイライトを消す場合は:noh[l]
+set hlsearch
+nnoremap <Esc><Esc> :noh<CR>
+
+"スクロール時に表示を10行確保
+set scrolloff=10
+
+" ピープ音なし
+set visualbell t_vb=
+
+" surround.vim
+"--------------------------------
+set surround
+
+" indent
+"--------------------------------
+"選択範囲のインデントを連続して変更
+vnoremap < <gv
+vnoremap > >gv
+
+
+" normal mode
+"--------------------------------
+
+" toggle : ;
+noremap ; :
+noremap : ;
+
+noremap ,,r :<C-u>action Run<CR>
+noremap ,,a :<C-u>action Rerun<CR>
+noremap ,,d :<C-u>action Debug<CR>
+noremap ,,c :<C-u>action Stop<CR>
+
+" insert mode
+"--------------------------------
+inoremap <C-a> <C-o>^
+inoremap <C-e> <C-o>$<Right>
+inoremap <C-b> <Left>
+inoremap <C-f> <Right>
+inoremap <C-n> <Down>
+inoremap <C-p> <Up>
+inoremap <C-h> <BS>
+inoremap <C-d> <Del>
+inoremap <C-k> <C-o>D<Right>
+inoremap <C-u> <C-o>d^
+inoremap <C-w> <C-o>db
+
+
+" move tab
+"--------------------------------
+nmap <C-t><C-n> gt
+nmap <C-t><C-p> gT
+
+imap <C-t><C-n> <Esc>gt
+imap <C-t><C-p> <Esc>gT
+
+" code jump
+"--------------------------------
+nnoremap <C-o> :<C-u>action Back<CR>
+nnoremap <C-i> :<C-u>action Forward<CR>
+nnoremap <C-S-o> <C-o>
+nnoremap <C-S-i> <C-i>
+" prev/next method
+nnoremap [m :<C-u>action MethodUp<CR>
+nnoremap ]m :<C-u>action MethodDown<CR>
+" prev/next changed
+nnoremap [c :<C-u>action VcsShowPrevChangeMarker<CR>
+nnoremap ]c :<C-u>action VcsShowNextChangeMarker<CR>
+" prev changed / return
+nnoremap g; :<C-u>action JumpToLastChange<CR>
+nnoremap g, :<C-u>action JumpToNextChange<CR>
+
+" refactor
+"--------------------------------
+nnoremap ,re :<C-u>action Refactorings.QuickListPopupAction<CR>
+nnoremap ,rn :<C-u>action RenameElement<CR>
+nnoremap ,rs :<C-u>action ChangeSignature<CR>
+nnoremap ,rt :<C-u>action ChangeTypeSignature<CR>
+
+" etc
+"--------------------------------
+
+" show JavaDoc
+nnoremap K :<C-u>action QuickJavaDoc<CR>
+" show usages
+nnoremap <C-k> :<C-u>action ShowUsages<CR>

@@ -1,0 +1,393 @@
+[[plugins]]
+repo = 'Shougo/dein.vim'
+
+[[plugins]]
+repo = 'vim-jp/vimdoc-ja'
+
+[[plugins]]
+repo = 'kristijanhusak/vim-hybrid-material'
+hook_add = '''
+  set background=dark
+  colorscheme hybrid_material
+
+  let g:enable_bold_font=1
+'''
+
+[[plugins]]
+repo = 'rhysd/accelerated-jk'
+hook_add = '''
+  nmap j <Plug>(accelerated_jk_gj)
+  nmap k <Plug>(accelerated_jk_gk)
+'''
+
+[[plugins]]
+repo = 'embear/vim-localvimrc'
+hook_add = '''
+  let g:localvimrc_persistent=2
+'''
+
+[[plugins]]
+repo = 'tpope/vim-obsession'
+hook_add = '''
+  nnoremap ,S :<C-u>mksession!<CR><ESC>
+'''
+
+[[plugins]]
+repo = 'Shougo/vimproc.vim'
+build = 'make'
+
+[[plugins]]
+repo = 'Shougo/deoplete.nvim'
+hook_add = """
+  let g:deoplete#enable_at_startup = 1
+  let g:deoplete#auto_complete_start_length = 2
+  let g:deoplete#enable_smart_case = 1
+  let g:deoplete#sources = {}
+  let g:deoplete#sources._=['omni', 'buffer', 'member', 'tag', 'ultisnips', 'file']
+"""
+
+[[plugins]]
+repo = 'alvan/vim-closetag'
+on_ft = ['html','xml','eruby','html.twig','riot']
+hook_add = """
+  let g:closetag_filenames = "*.html,*.xml,*.erb,*.tag"
+"""
+# vimfiler
+[[plugins]]
+repo = 'Shougo/vimfiler.vim'
+depends = 'unite.vim'
+hook_add = '''
+  nnoremap ,fe :VimFilerExplore -split -winwidth=35 -find -no-quit -no-focus<CR>
+'''
+
+[[plugins]]
+repo = 'scrooloose/nerdtree'
+[[plugins]]
+repo = 'tiagofumo/vim-nerdtree-syntax-highlight'
+[[plugins]]
+repo = 'jistr/vim-nerdtree-tabs'
+hook_add = '''
+  let g:NERDTreeWinSize = 30
+  let g:nerdtree_tabs_open_on_console_startup = 0
+  autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+  nnoremap ,ex :NERDTreeFocusToggle<CR>
+
+  let g:NERDTreeExactMatchHighlightColor = {}
+  let g:NERDTreeExactMatchHighlightColor['.gitignore'] = 'F54D27'
+'''
+[[plugins]]
+repo = 'ryanoasis/vim-devicons'
+
+[[plugins]]
+repo = 'jlanzarotta/bufexplorer' 
+hook_add = '''
+  nmap ,be \be
+  nmap ,bv \bv
+  nmap ,bs \bs
+'''
+
+[[plugins]]
+repo = 'majutsushi/tagbar'
+hook_add = '''
+  nnoremap ,tag :TagbarToggle<CR>
+'''
+
+[[plugins]]
+repo = 'itchyny/lightline.vim'
+hook_add = '''
+  set laststatus=2
+  let g:lightline = {
+    \ 'active': {
+    \   'left': [ [ 'mode', 'paste' ],
+    \             [ 'fugitive', 'gitgutter', 'readonly' , 'dir', 'filename']]
+    \ },
+    \ 'inactive': {
+    \       'left': [['dir'], ['filename'], ['filetype', 'readonly', 'modified']]
+    \ },
+    \ 'tabline': {
+    \       'right': [['rows'], ['cd'], ['tabopts']]
+    \ },
+    \ 'tab': {
+    \       'active': ['prefix', 'filename']
+    \ },
+    \ 'component_function': {
+    \   'fugitive': 'MyFugitive',
+    \   'gitgutter' : 'MyGitGutter',
+    \   'readonly': 'MyReadonly',
+    \   'filename': 'MyFilename',
+    \   'modified': 'MyModified',
+    \   'mode': 'LightlineMode'
+    \ },
+    \ 'separator': { 'left': "\ue0b0", 'right': "\ue0b2" },
+    \ 'subseparator': { 'left': "\ue0b1", 'right': "\ue0b3" }
+    \ }
+
+  let g:lightline.component = {}
+  let g:lightline.component.dir = '%.35(%{expand("%:h:s?\\S$?\\0?")}%)'
+
+    function! MyModified()
+        if &filetype == "help"
+            return ""
+        elseif &modified
+            return "+"
+        elseif &modifiable
+            return ""
+        else
+            return ""
+        endif
+    endfunction
+
+    function! MyReadonly()
+        if &filetype == "help"
+            return ""
+        elseif &readonly
+            return "\ue0a2"
+        else
+            return ""
+        endif
+    endfunction
+
+    function! MyFugitive()
+        if exists("*fugitive#head")
+            let _ = fugitive#head()
+            return strlen(_) ? "\ue0a0 "._ : ''
+        endif
+        return ''
+    endfunction
+
+    function! MyGitGutter()
+        if ! exists('*GitGutterGetHunkSummary')
+                    \ || ! get(g:, 'gitgutter_enabled', 0)
+                    \ || winwidth('.') <= 90
+            return ''
+        endif
+        let symbols = [
+                    \ g:gitgutter_sign_added . ' ',
+                    \ g:gitgutter_sign_modified . ' ',
+                    \ g:gitgutter_sign_removed . ' '
+                    \ ]
+        let hunks = GitGutterGetHunkSummary()
+        let ret = []
+        for i in [0, 1, 2]
+            if hunks[i] > 0
+                call add(ret, symbols[i] . hunks[i])
+            endif
+        endfor
+        return join(ret, ' ')
+    endfunction
+
+    function! MyFilename()
+        return ('' != MyReadonly() ? MyReadonly() . ' ' : '') .
+                    \ (&ft == 'vimfiler' ? vimfiler#get_status_string() :
+                    \  &ft == 'unite' ? unite#get_status_string() :
+                    \ '' != expand('%:t') ? expand('%:t') : '[No Name]') .
+                    \ ('' != MyModified() ? ' ' . MyModified() : '')
+    endfunction
+
+  function! LightlineMode()
+    let fname = expand('%:t')
+    return fname == 'ControlP' ? 'CtrlP' :
+          \ fname =~ 'NERD_tree' ? 'NERDTree' :
+          \ &ft == 'unite' ? 'Unite' :
+          \ winwidth(0) > 60 ? lightline#mode() : ''
+  endfunction
+'''
+
+# Git
+#------------------------------
+[[plugins]]
+repo = 'tpope/vim-fugitive'
+hook_add = '''
+  nnoremap <Space>gd :<C-u>Gdiff<CR>
+  nnoremap <Space>gs :<C-u>Gstatus<CR><C-w>15+
+  nnoremap <Space>gl :<C-u>Glog<CR>
+  nnoremap <Space>ga :<C-u>Gwrite<CR>
+  nnoremap <Space>gc :<C-u>Gcommit<CR>
+  nnoremap <Space>gC :<C-u>Git commit --amend<CR>
+  nnoremap <Space>gb :<C-u>Gblame<CR>
+'''
+[[plugins]]
+repo = 'airblade/vim-gitgutter'
+hook_add = '''
+  set signcolumn=yes
+  nnoremap <silent> ,gg :<C-u>GitGutterToggle<CR>
+  nnoremap <silent> ,gh :<C-u>GitGutterLineHighlightsToggle<CR>
+'''
+
+# Utils
+#------------------------------
+[[plugins]]
+repo = 'osyo-manga/vim-over'
+hook_add = '''
+  " 全体置換
+  nnoremap <silent> <Space>r :OverCommandLine<CR>%s//g<Left><Left>
+  " 選択範囲置換
+  vnoremap <silent> <Space>r :OverCommandLine<CR>s//g<Left><Left>
+  " カーソルしたの単語置換
+  nnoremap sub :OverCommandLine<CR>%s/<C-r><C-w>//g<Left><Left>
+'''
+
+[[plugins]]
+repo = 'vim-scripts/copypath.vim'
+hook_add = '''
+  nnoremap <silent> ,cp :CopyPath<CR>
+  nnoremap <silent> ,cf :CopyFileName<CR>
+'''
+
+[[plugins]]
+repo = 'kana/vim-textobj-indent'
+hook_add = """
+  hi IndentGuidesOdd  ctermbg = black
+  hi IndentGuidesEven ctermbg = darkgrey
+"""
+[[plugins]]
+repo = 'kana/vim-textobj-user'
+[[plugins]]
+repo = 'kana/vim-textobj-function'
+[[plugins]]
+repo = 'kana/vim-operator-user'
+[[plugins]]
+repo = 'osyo-manga/vim-operator-search'
+depends = ['vim-operator-user', 'vim-textobj-function', 'vim-textobj-user']
+hook_add = '''
+nmap <Space>/ <Plug>(operator-search)if
+'''
+
+[[plugins]]
+repo = 'scrooloose/nerdcommenter'
+hook_add = '''
+  let g:NERDCreateDefaultMappings = 0
+  let NERDSpaceDelims = 1
+
+  nmap ,c<Space> <Plug>NERDCommenterToggle
+  vmap ,c<Space> <Plug>NERDCommenterToggle
+  vmap ,cs <Plug>NERDCommenterSexy
+'''
+[[plugins]]
+repo = 'vim-scripts/AnsiEsc.vim'
+[[plugins]]
+repo = 'vim-scripts/YankRing.vim'
+[[plugins]]
+repo = 'vim-scripts/renamer.vim'
+[[plugins]]
+repo = 'vim-scripts/grep.vim'
+[[plugins]]
+repo = 'tpope/vim-surround'
+[[plugins]]
+repo = 'tpope/vim-repeat'
+[[plugins]]
+repo = 'jiangmiao/auto-pairs'
+[[plugins]]
+repo = 'h1mesuke/vim-alignta'
+[[plugins]]
+repo = 'kana/vim-fakeclip'
+[[plugins]]
+repo = 'kana/vim-smartchr'
+hook_add = '''
+  augroup MySmartchr
+    autocmd!
+    inoremap <buffer><expr> ? smartchr#one_of('?', ' ? ')
+    inoremap <buffer><expr> : smartchr#one_of(':', '::', ' : ')
+
+    " 演算子の間に空白を入れる
+    autocmd FileType * inoremap <buffer><expr> < search('^#include\%#', 'bcn')? ' <': smartchr#one_of('<', ' << ', ' < ', '<<<')
+    autocmd FileType * inoremap <buffer><expr> + smartchr#one_of(' + ', '++', '+')
+    autocmd FileType * inoremap <buffer><expr> - smartchr#one_of('-', '--', ' - ')
+    autocmd FileType * inoremap <buffer><expr> % smartchr#one_of(' % ', '%')
+    autocmd FileType * inoremap <buffer><expr> * smartchr#one_of(' * ', '*')
+    autocmd FileType * inoremap <buffer><expr> & smartchr#one_of('&', ' && ', ' & ')
+    autocmd FileType * inoremap <buffer><expr> <Bar> smartchr#one_of('<Bar>', ' <Bar><Bar> ', ' <Bar> ')
+    autocmd FileType * inoremap <buffer><expr> , smartchr#one_of(', ',',')
+
+    " =の場合、単純な代入や比較演算子として入力する場合は前後にスペースをいれる。
+    " 複合演算代入としての入力の場合は、直前のスペースを削除して=を入力
+    autocmd FileType * inoremap <buffer><expr> =
+      \ search('\(&\<bar><bar>\<bar>+\<bar>-\<bar>/\<bar>>\<bar><\) \%#', 'bcn')? '<bs>= ' :
+      \ search('\(*\<bar>!\)\%#', 'bcn')? '= ' : smartchr#one_of(' = ', ' == ', '=')
+
+    " 下記の文字は連続して現れることがまれなので、二回続けて入力したら改行する
+    autocmd FileType * inoremap <buffer><expr> ; smartchr#one_of(';', ';<cr>')
+    autocmd FileType * inoremap <buffer><expr> (<CR> smartchr#one_of('()<Left><cr><cr><Up><Tab>')
+
+    " if文直後の(は自動で間に空白を入れる
+    "inoremap <buffer><expr> ( search('\<\if\%#', 'bcn')? ' (  )': '('
+
+    " アロー系演算子
+    autocmd FileType * inoremap <buffer><expr> =~ smartchr#one_of(' =~ ')
+    autocmd FileType * inoremap <buffer><expr> => smartchr#one_of(' => ')
+    autocmd FileType * inoremap <buffer><expr> . smartchr#loop('.', '=>', '..', '...')
+
+    " ruby
+    autocmd FileType ruby inoremap <buffer><expr> =
+      \ search('\(&\<bar><bar>\<bar>+\<bar>-\<bar>/\<bar>>\<bar><\) \%#', 'bcn')? '<bs>= '
+      \ : search('\(*\<bar>!\)\%#', 'bcn') ? '= '
+      \ : smartchr#one_of(' = ', ' == ', '=')
+
+    " haml
+    autocmd FileType haml inoremap <buffer><expr> = search('\(&\<bar><bar>\<bar>+\<bar>-\<bar>/\<bar>>\<bar><\) \%#', 'bcn')? '<bs>= '
+                    \ : search('\(*\<bar>!\)\%#', 'bcn') ? '= '
+                    \ : smartchr#one_of('=', ' = ', ' == ')
+    autocmd FileType haml inoremap <buffer><expr> => smartchr#one_of(' => ')
+    autocmd FileType haml inoremap <buffer><expr> % smartchr#one_of('%', ' % ')
+
+    " Reset
+    "--------------------------------------------
+    autocmd FileType eruby inoremap <buffer><expr> = ('=')
+    autocmd FileType html inoremap <buffer><expr> = ('=')
+    autocmd FileType slim inoremap <buffer><expr> = ('=')
+    autocmd FileType html.twig inoremap <buffer><expr> = ('=')
+    autocmd FileType javascript,css inoremap <buffer><expr> * ('*')
+  augroup END
+'''
+[[plugins]]
+repo = 'nathanaelkane/vim-indent-guides'
+hook_add = """
+  let g:indent_guides_enable_on_vim_startup = 1
+  let g:indent_guides_start_level = 1
+  let g:indent_guides_guide_size = 1
+"""
+
+# Quickfix
+[[plugins]]
+repo = 'jceb/vim-hier'
+
+# Unite
+[[plugins]]
+repo = 'Shougo/unite.vim'
+hook_add = '''
+  nmap <C-u> [unite]
+  nnoremap [unite] <Nop>
+
+  nnoremap <silent> [unite]u :<C-u>Unite file<CR>
+  nnoremap <silent> [unite]m :<C-u>Unite file_mru<CR>
+  nnoremap <silent> [unite]g :<C-u>Unite grep<CR>
+  nnoremap <silent> [unite]f :<C-u>Unite buffer<CR>
+  nnoremap <silent> [unite]r :<C-u>Unite -buffer-name=register register<CR>
+  nnoremap <silent> [unite]b :<C-u>Unite bookmark<CR>
+  nnoremap <silent> [unite]a :<C-u>UniteBookmarkAdd<CR>
+  nnoremap <silent> [unite]o :<C-u>Unite file_rec/async:!<CR>i
+
+  autocmd FileType unite call s:unite_my_settings()
+  function! s:unite_my_settings()"{{{
+      imap <buffer> jj <Plug>(unite_insert_leave)
+  endfunction"}}}
+
+  let g:unite_source_grep_command = 'ag'
+  let g:unite_source_grep_default_opts = '--nocolor --nogroup'
+  let g:unite_source_grep_max_candidates = 200
+  let g:unite_source_grep_recursive_opt = ''
+  vnoremap /g y:Unite grep::-iRn:<C-R>=escape(@", '\\.*$^[]')<CR><CR>
+'''
+
+[[plugins]]
+repo = 'scrooloose/syntastic'
+hook_add = """
+  let g:syntastic_check_on_open=0 "ファイルを開いたときはチェックしない
+  let g:syntastic_check_on_save=1 "保存時にはチェック
+  let g:syntastic_check_on_wq = 0 " wqではチェックしない
+  let g:syntastic_auto_loc_list=1 "エラーがあったら自動でロケーションリストを開く
+  let g:syntastic_loc_list_height=6 "エラー表示ウィンドウの高さ
+  set statusline+=%#warningmsg# "エラーメッセージの書式
+  " set statusline+=%{SyntasticStatuslineFlag()}
+  set statusline+=%*
+"""

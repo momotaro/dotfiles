@@ -8,9 +8,10 @@ TERM=screen-256color
 autoload -U colors
 colors
 
-# Configure pure
-autoload -U promptinit; promptinit
-prompt pure
+# Configure Prezto
+if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
+  source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
+fi
 
 # Vi モード
 set -o vi
@@ -28,12 +29,6 @@ setopt no_beep
 # プログラマブル保管機能を有効
 autoload -Uz compinit
 compinit
-
-. /usr/local/bin/cdd
-
-chpwd() {
-    _cdd_chpwd
-}
 
 # 大文字 小文字を区別せず補完する
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
@@ -88,6 +83,8 @@ if [[ -n "$TMUX" ]]; then
     eval "$(tmux source-file ~/.tmux.conf)"
 fi
 
+# Open
+[ `uname` = "Linux" ] && alias open='xdg-open 2>/dev/null'
+
 source ~/.zshenv
 source ~/.zsh_profile
-#export PATH="/usr/local/opt/postgresql@9.4/bin:$PATH"

@@ -78,6 +78,14 @@ zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 # ファイル名の展開で辞書順ではなく数値的にソート
 setopt numeric_glob_sort
 
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+export FZF_DEFAULT_COMMAND='rg --files --hidden --glob "!.git/*"'
+export FZF_DEFAULT_OPTS='--height 40% --reverse --border'
+function fzf_search_file() {
+  find . | fzf
+}
+zle -N fzf_search_file
+bindkey '^F' fzf_search_file
 
 if [[ -n "$TMUX" ]]; then
     eval "$(tmux source-file ~/.tmux.conf)"
@@ -85,6 +93,10 @@ fi
 
 # Open
 [ `uname` = "Linux" ] && alias open='xdg-open 2>/dev/null'
+
+#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+export SDKMAN_DIR="/home/momotaro/.sdkman"
+[[ -s "/home/momotaro/.sdkman/bin/sdkman-init.sh" ]] && source "/home/momotaro/.sdkman/bin/sdkman-init.sh"
 
 source ~/.zshenv
 source ~/.zsh_profile

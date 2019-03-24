@@ -1,0 +1,51 @@
+set hlsearch
+set ignorecase
+set smartcase
+
+"-------------------------
+" Custom key bind
+"-------------------------
+nnoremap <C-i> :xccmd goForwardInHistoryByCommand<CR>
+nnoremap <C-o> :xccmd goBackInHistoryByCommand<CR>
+inoremap <C-i> <Esc>:xccmd goForwardInHistoryByCommand<CR>
+inoremap <C-o> <Esc>:xccmd goBackInHistoryByCommand<CR>
+
+nnoremap <C-t><C-p> :xccmd selectPreviousTab<CR>
+nnoremap <C-t><C-n> :xccmd selectNextTab<CR>
+inoremap <C-t><C-n> <Esc>:xccmd selectNextTab<CR>
+inoremap <C-t><C-p> <Esc>:xccmd selectPreviousTab<CR>
+
+" Normal mode
+"-------------------------
+nnoremap ; :
+nnoremap : ;
+
+" Source jump
+nnoremap <C-n> :xcmenucmd Jump to Next Issue<CR>
+nnoremap <C-p> :xcmenucmd Jump to Previous Issue<CR>
+nnoremap <C-N> :xcmenucmd Fix Next Issue<CR>
+nnoremap <C-P> :xcmenucmd Fix Previous Issue<CR>
+nnoremap <Space>h :xccmd toggleNavigatorsVisibility<CR>
+nnoremap <Space>j :xccmd toggleDebuggerVisibility<CR>
+nnoremap <Space>k :xccmd toggleToolbarShown<CR>
+nnoremap <Space>l :xccmd toggleUtilitiesVisibility<CR>
+nnoremap gf gd
+
+" Refactor
+nnoremap ,re :xcmenucmd Refactor<CR>
+nnoremap ,ren :xccmd refactorRename<CR>
+nnoremap ,ree :xccmd refactorExtract<CR>
+
+" Insert mode
+"-------------------------
+inoremap <C-p> <Up>
+inoremap <C-n> <Down>
+inoremap <C-f> <Right>
+inoremap <C-b> <Left>
+inoremap <C-a> <Esc>I
+inoremap <C-e> <Esc>$a
+inoremap ,, \()<Left>
+inoremap >> <Space>-><Space>
+inoremap " ""<Left>
+inoremap { {}<Left>
+inoremap {<CR> {<CR>

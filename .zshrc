@@ -8,9 +8,10 @@ TERM=screen-256color
 autoload -U colors
 colors
 
-# Configure pure
-autoload -U promptinit; promptinit
-prompt pure
+# Configure Prezto
+if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
+  source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
+fi
 
 # Vi モード
 set -o vi
@@ -28,12 +29,6 @@ setopt no_beep
 # プログラマブル保管機能を有効
 autoload -Uz compinit
 compinit
-
-. /usr/local/bin/cdd
-
-chpwd() {
-    _cdd_chpwd
-}
 
 # 大文字 小文字を区別せず補完する
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
@@ -83,11 +78,25 @@ zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 # ファイル名の展開で辞書順ではなく数値的にソート
 setopt numeric_glob_sort
 
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+export FZF_DEFAULT_COMMAND='rg --files --hidden --glob "!.git/*"'
+export FZF_DEFAULT_OPTS='--height 40% --reverse --border'
+function fzf_search_file() {
+  find . | fzf
+}
+zle -N fzf_search_file
+bindkey '^F' fzf_search_file
 
 if [[ -n "$TMUX" ]]; then
     eval "$(tmux source-file ~/.tmux.conf)"
 fi
 
+# Open
+[ `uname` = "Linux" ] && alias open='xdg-open 2>/dev/null'
+
+#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+export SDKMAN_DIR="/home/momotaro/.sdkman"
+[[ -s "/home/momotaro/.sdkman/bin/sdkman-init.sh" ]] && source "/home/momotaro/.sdkman/bin/sdkman-init.sh"
+
 source ~/.zshenv
 source ~/.zsh_profile
-#export PATH="/usr/local/opt/postgresql@9.4/bin:$PATH"

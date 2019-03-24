@@ -110,6 +110,7 @@ hook_add = """
     \ 'javascript.jsx': ['javascript-typescript-stdio'],
     \ 'typescript': ['javascript-typescript-stdio'],
     \ 'typescript.tsx': ['javascript-typescript-stdio'],
+    \ 'vue': ['vls'],
     \ 'graphql': ['graphql'],
     \ 'gql': ['graphql'],
     \ 'ruby': ['solargraph', 'stdio'],

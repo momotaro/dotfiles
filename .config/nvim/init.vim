@@ -1,11 +1,12 @@
 " 基本的な設定
 "----------------------------------------------------
-let g:python_host_prog = system('(type pyenv &>/dev/null && echo -n "$(pyenv root)/versions/neovim-2/bin/python") || echo -n $(which python2)')
-let g:python3_host_prog = system('(type pyenv &>/dev/null && echo -n "$(pyenv root)/versions/neovim-3/bin/python") || echo -n $(which python3)')
+let g:python_host_prog = system('(type pyenv &>/dev/null && echo -n "$(pyenv root)/versions/neovim2/bin/python") || echo -n $(which python2)')
+let g:python3_host_prog = system('(type pyenv &>/dev/null && echo -n "$(pyenv root)/versions/neovim3/bin/python") || echo -n $(which python3)')
 
-set fileencodings=utf-8,sjis
-set enc=utf-8
-set fenc=utf-8
+set clipboard=unnamed,unnamedplus
+
+set encoding=UTF-8
+set fileencodings=UTF-8,sjis
 set guifont=*
 
 set termguicolors
@@ -194,13 +195,11 @@ nnoremap ,? ?
 
 " Tabs
 "----------------------------------------------------
-" nnoremap <Space>t t
-" nnoremap <Space>T T
-" nnoremap t <Nop>
 nnoremap <silent> tc :<C-u>tabnew<CR>:tabmove<CR>
 nnoremap <silent> tk :<C-u>tabclose<CR>
 nnoremap <silent> tn :<C-u>tabnext<CR>
 nnoremap <silent> tp :<C-u>tabprevious<CR>
+
 " jump
 for n in range(1, 9)
   execute 'nnoremap <silent> t'.n  ':<C-u>tabnext'.n.'<CR>'
@@ -302,16 +301,6 @@ endif
 filetype plugin indent on
 syntax enable
 
-" fakeclip
-"----------------------------------------
-nmap <silent> cyy <Home><Plug>(fakeclip-y)<End><ESC>
-nmap <silent> cp "*p
-vnoremap <silent> ,cy "*y
-
-" text alignment
-"----------------------------------------
-xnoremap al :Alignta<Space>
-
 " Qfreplace
 "----------------------------------------
 autocmd FileType qf nnoremap <silent> ,r :<C-u>Qfreplace<CR><ESC>
@@ -337,47 +326,27 @@ au BufRead,BufNewFile *.xml set filetype=xml tabstop=4 shiftwidth=4 softtabstop=
 au BufRead,BufNewFile *.toml set filetype=toml tabstop=2 shiftwidth=2 softtabstop=2
 au BufRead,BufNewFile slack://* set filetype=slack
 
+"--------------------------------------------
 " Enable omni completion.
 "--------------------------------------------
 imap <Nul> <C-Space>
 imap <C-Space> <C-x><C-o>
-autocmd FileType html,markdown,riot setlocal omnifunc=htmlcomplete#CompleteTags
-autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
-autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-autocmd FileType haskell setlocal omnifunc=necoghc#omnifunc
 
-
-" ctags
 "--------------------------------------------
-set tags=.tags;$HOME
+" Script
+"--------------------------------------------
 
-nnoremap <silent> gt <C-]>
-
-function! s:execute_ctags() abort
-  let tag_name = '.tags'
-  let tags_path = findfile(tag_name, '.;')
-  if tags_path ==# ''
-    return
+" Toggle window size 
+"--------------------------------------------
+let g:toggle_window_size = 0
+function! ToggleWindowSize()
+  if g:toggle_window_size == 1
+    exec "normal \<C-w>="
+    let g:toggle_window_size = 0
+  else
+    :resize
+    :vertical resize
+    let g:toggle_window_size = 1
   endif
-
-  let tags_dirpath = fnamemodify(tags_path, ':p:h')
-  execute 'silent !cd' tags_dirpath '&& ctags -R -f' tag_name '2> /dev/null &'
 endfunction
-
-augroup ctags
-  autocmd!
-  autocmd BufWritePost * call s:execute_ctags()
-augroup END
-
-"----------------------------------------------------
-" オートコマンド
-"----------------------------------------------------
-"if has("autocmd")
-"    " ファイルタイプ別インデント、プラグインを有効にする
-"    filetype plugin indent on
-"    " カーソル位置を記憶する
-"    autocmd BufReadPost *
-"                \ if line("'\"") > 0 && line("'\"") <= line("$") |
-"                \   exe "normal g`\"" |
-"                \ endif
-"endif
+nnoremap M :call ToggleWindowSize()<CR>

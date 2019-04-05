@@ -9,7 +9,10 @@ autoload -U colors
 colors
 
 # Configure Prezto
-if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" fi 
+if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
+  source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
+fi
+
 # Vi モード
 set -o vi
 bindkey '^p' history-beginning-search-backward

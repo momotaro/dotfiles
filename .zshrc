@@ -27,8 +27,8 @@ stty start undef
 setopt no_beep
 
 # プログラマブル保管機能を有効
-autoload -Uz compinit
-compinit
+autoload -Uz compinit && compinit
+autoload -Uz bashcompinit && bashcompinit
 
 # 大文字 小文字を区別せず補完する
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'

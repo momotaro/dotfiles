@@ -209,3 +209,26 @@ hook_add = """
   let g:surround_{char2nr("-")} = "<% \r %>"
   let g:surround_{char2nr("=")} = "<%= \r %>"
 """
+
+# Golang
+#-----------------------------------
+
+[[plugins]]
+repo = 'fatih/vim-go'
+on_ft = ['go']
+hook_add = '''
+  autocmd BufRead,BufNewFile *.go set filetype=go tabstop=4 shiftwidth=4
+
+  " 保存時に必要なimportを自動的に挿入
+  let g:go_fmt_command = "goimports"
+
+  " LSPに任せる機能をOFFにする
+  let g:go_def_mapping_enabled = 0
+  let g:go_doc_keywordprg_enabled = 0
+'''
+
+# Haskell
+#-----------------------------------
+[[plugins]]
+repo = 'neovimhaskell/haskell-vim'
+on_ft = ['haskell']

@@ -5,9 +5,7 @@ set smartcase
 "-------------------------
 " Custom key bind
 "-------------------------
-nnoremap <C-i> :xccmd goForwardInHistoryByCommand<CR>
-nnoremap <C-o> :xccmd goBackInHistoryByCommand<CR>
-inoremap <C-i> <Esc>:xccmd goForwardInHistoryByCommand<CR>
+nnoremap <C-i> :xccmd goForwardInHistoryByCommand<CR> nnoremap <C-o> :xccmd goBackInHistoryByCommand<CR> inoremap <C-i> <Esc>:xccmd goForwardInHistoryByCommand<CR>
 inoremap <C-o> <Esc>:xccmd goBackInHistoryByCommand<CR>
 
 nnoremap <C-t><C-p> :xccmd selectPreviousTab<CR>
@@ -45,7 +43,4 @@ inoremap <C-b> <Left>
 inoremap <C-a> <Esc>I
 inoremap <C-e> <Esc>$a
 inoremap ,, \()<Left>
-inoremap >> <Space>-><Space>
-inoremap " ""<Left>
-inoremap { {}<Left>
-inoremap {<CR> {<CR>
+inoremap ;; ->

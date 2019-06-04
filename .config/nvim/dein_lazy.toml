@@ -71,7 +71,7 @@ hook_add = '''
 [[plugins]]
 repo = 'othree/yajs.vim'
 depends = ['ale']
-on_ft = ['javascript', 'jsx', 'javascript.jsx']
+on_ft = ['javascript', 'jsx', 'jsx.javascript']
 hook_add = """
   autocmd BufNewFile,BufRead *.js set filetype=javascript tabstop=2 shiftwidth=2
   autocmd BufNewFile,BufRead *.es6 set filetype=javascript tabstop=2 shiftwidth=2
@@ -82,11 +82,11 @@ hook_add = """
 
 [[plugins]]
 repo = 'othree/es.next.syntax.vim'
-on_ft = ['javascript', 'jsx', 'javascript.jsx']
+on_ft = ['javascript', 'jsx', 'jsx.javascript']
 
 [[plugins]]
 repo = 'othree/javascript-libraries-syntax.vim'
-on_ft = ['javascript', 'jsx', 'javascript.jsx']
+on_ft = ['javascript', 'jsx', 'jsx.javascript']
 hook_add = '''
   function! EnableJavascript()
     " Setup used libraries
@@ -98,24 +98,23 @@ hook_add = '''
     let b:javascript_lib_use_jasmine = 1
     let b:javascript_lib_use_vue = 1
   endfunction
-  autocmd FileType javascript,jsx,javascript.jsx call EnableJavascript()
+  autocmd FileType javascript,jsx,jsx.javascript call EnableJavascript()
 '''
 
 [[plugins]]
 repo = 'MaxMEllon/vim-jsx-pretty'
-on_ft = ['jsx', 'javascript.jsx']
+on_ft = ['jsx', 'jsx.javascript']
 hook_add = """
   autocmd BufRead,BufNewFile *.jsx set filetype=jsx.javascript tabstop=2 shiftwidth=2
 """
 
 # utils
 
-[[plugins]]
-repo = 'jason0x43/vim-js-indent'
-on_ft = ['javascript', 'jsx', 'javascript.jsx']
-hook_add = '''
-  let g:js_indent_flat_switch = 1
-'''
+# [[plugins]]
+# repo = 'jason0x43/vim-js-indent'
+# on_ft = ['javascript', 'jsx', 'jsx.javascript']
+# hook_add = '''
+# '''
 
 [[plugins]]
 repo = 'carlitux/deoplete-ternjs'
@@ -143,17 +142,17 @@ hook_add = """
   autocmd BufRead,BufNewFile *.tsx set filetype=typescript expandtab tabstop=2 shiftwidth=2
 """
 
-[[plugins]]
-repo = 'peitalin/vim-jsx-typescript'
-on_ft = ['typescript', 'typescript.tsx']
-depends = ['vim-tsx-pretty', 'typescript-vim']
+# [[plugins]]
+# repo = 'peitalin/vim-jsx-typescript'
+# on_ft = ['typescript', 'typescript.tsx']
+# depends = ['vim-tsx-pretty', 'typescript-vim']
 
 # linter & formatter
 
 [[plugins]]
 repo     = 'prettier/vim-prettier'
 build    = 'npm install'
-on_ft    = ['javascript', 'javascript.jsx', 'typescript', 'typescript.tsx', 'vue', 'css', 'scss', 'json', 'markdown']
+on_ft    = ['javascript', 'jsx.javascript', 'typescript', 'typescript.tsx', 'vue', 'css', 'scss', 'json', 'markdown']
 hook_source = """
   " @formatアノテーションを持ったファイルの自動フォーマットを無効にする
   let g:prettier#autoformat = 0
@@ -161,13 +160,8 @@ hook_source = """
   " Prettierのパースエラーをquickfixに表示しない
   let g:prettier#quickfix_enabled = 0
 
-  autocmd BufWritePre *.js,*.ts,*tsx,*.vue,*.css,*.scss,*.json,*.md PrettierAsync
+  autocmd BufWritePre *.js,*.jsx,*.ts,*tsx,*.vue,*.css,*.scss,*.json,*.md PrettierAsync
 """
-
-[[plugins]]
-repo = 'fleischie/vim-styled-components'
-on_ft = ['javascript', 'jsx', 'javascript.jsx', 'typescript', 'typescript.tsx']
-
 
 # vue
 [[plugins]]

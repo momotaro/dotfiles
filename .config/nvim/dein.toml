@@ -97,50 +97,75 @@ hook_add = """
 """
 
 [[plugins]]
-repo = 'autozimu/LanguageClient-neovim'
-rev = 'next'
-depends = ['deoplete.nvim']
-build = 'bash install.sh'
+repo = 'neoclide/coc.nvim'
+merge = 0
+build = './install.sh nightly'
 hook_add = """
-  set hidden
-  let g:LanguageClient_autoStart = 1
-  let g:LanguageClient_loadSettings = 1
+  nmap <silent> gd <Plug>(coc-definition)
+  nmap <silent> gy <Plug>(coc-type-definition)
+  nmap <silent> gi <Plug>(coc-implementation)
+  nmap <silent> gr <Plug>(coc-references)
+  " Remap for rename current word
+  nmap <silent> ,re <Plug>(coc-rename)
 
-  let g:LanguageClient_rootMakers = {
-    \ 'haskell': ['*.cabal', 'stack.yaml'],
-    \ } 
+  autocmd CursorHold * silent call CocActionAsync('highlight')
+  " Use K for show documentation in preview window
+  nnoremap <silent> K :call <SID>show_documentation()<CR>
 
-  let g:LanguageClient_serverCommands = {
-    \ 'javascript': ['javascript-typescript-stdio'],
-    \ 'javascript.jsx': ['javascript-typescript-stdio'],
-    \ 'typescript': ['javascript-typescript-stdio'],
-    \ 'typescript.tsx': ['javascript-typescript-stdio'],
-    \ 'vue': ['vls'],
-    \ 'graphql': ['graphql'],
-    \ 'gql': ['graphql'],
-    \ 'ruby': ['solargraph', 'stdio'],
-    \ 'python': ['pyls'],
-    \ 'c': ['clangd'],
-    \ 'cpp': ['clangd'],
-    \ 'haskell': ['hie-wrapper'],
-    \ 'go': ['gopls'],
-    \}
-
-  nnoremap <F5> :call LanguageClient_contextMenu()<CR>
-  nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
-  nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
-  nnoremap <silent> ,re :call LanguageClient#textDocument_rename()<CR>
-  nnoremap <silent> ,rf :call LanguageClient_textDocument_formatting()<CR>
-
-  augroup LanguageClient_config
-    autocmd!
-    autocmd User LanguageClientStarted setlocal signcolumn=yes
-    autocmd User LanguageClientStopped setlocal signcolumn=auto
-  augroup END
+  function! s:show_documentation()
+    if &filetype == 'vim'
+      execute 'h '.expand('<cword>')
+    else
+      call CocAction('doHover')
+    endif
+  endfunction
 """
-hook_source = '''
-  set completefunc=LanguageClient#complete
-'''
+
+
+# [[plugins]]
+# repo = 'autozimu/LanguageClient-neovim'
+# rev = 'next'
+# depends = ['deoplete.nvim']
+# build = 'bash install.sh'
+# hook_add = """
+  # set hidden
+  # let g:LanguageClient_autoStart = 1
+  # let g:LanguageClient_loadSettings = 1
+
+  # let g:LanguageClient_rootMakers = {
+    # \ 'haskell': ['*.cabal', 'stack.yaml'],
+    # \ } 
+
+  # let g:LanguageClient_serverCommands = {
+    # \ 'javascript': ['javascript-typescript-stdio'],
+    # \ 'javascript.jsx': ['javascript-typescript-stdio'],
+    # \ 'typescript': ['javascript-typescript-stdio'],
+    # \ 'typescript.tsx': ['javascript-typescript-stdio'],
+    # \ 'graphql': ['graphql'],
+    # \ 'gql': ['graphql'],
+    # \ 'ruby': ['solargraph', 'stdio'],
+    # \ 'python': ['pyls'],
+    # \ 'c': ['clangd'],
+    # \ 'cpp': ['clangd'],
+    # \ 'haskell': ['hie-wrapper'],
+    # \ 'go': ['gopls'],
+    # \}
+
+  # nnoremap <F5> :call LanguageClient_contextMenu()<CR>
+  # nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
+  # nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
+  # nnoremap <silent> ,re :call LanguageClient#textDocument_rename()<CR>
+  # nnoremap <silent> ,rf :call LanguageClient_textDocument_formatting()<CR>
+
+  # augroup LanguageClient_config
+    # autocmd!
+    # autocmd User LanguageClientStarted setlocal signcolumn=yes
+    # autocmd User LanguageClientStopped setlocal signcolumn=auto
+  # augroup END
+# """
+# hook_source = '''
+  # set completefunc=LanguageClient#complete
+# '''
 
 [[plugins]]
 repo = 'junegunn/fzf'
@@ -210,7 +235,7 @@ hook_add = """
         \ ['help', 'Denite help']
         \ ]
 
-  call denite#custom#var('menu', 'menus', s:menus)
+  " call denite#custom#var('menu', 'menus', s:menus)
 
   nnoremap [denite] <Nop>
   nmap ,, [denite]
@@ -218,7 +243,6 @@ hook_add = """
   nnoremap <silent> [denite]c :Denite changes<CR>
   nnoremap <silent> [denite]f :Denite file<CR>
   nnoremap <silent> [denite]g :Denite grep<CR>
-  nnoremap <silent> [denite]h :Denite help<CR>
   nnoremap <silent> [denite]h :Denite help<CR>
   nnoremap <silent> [denite]l :Denite line<CR>
   nnoremap <silent> [denite]t :Denite tag<CR>

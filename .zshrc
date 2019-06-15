@@ -81,11 +81,19 @@ setopt numeric_glob_sort
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 export FZF_DEFAULT_COMMAND='rg --files --hidden --glob "!.git/*"'
 export FZF_DEFAULT_OPTS='--height 40% --reverse --border'
+
 function fzf_search_file() {
   find . | fzf
 }
 zle -N fzf_search_file
 bindkey '^F' fzf_search_file
+
+function fzf_select_history() {
+  BUFFER=$(history -n -r 1 | fzf --no-sort +m --query "$LBUFFER" --prompt="History > ")
+  CURSOR=$#BUFFER
+}
+zle -N fzf_select_history
+bindkey '^r' fzf_select_history
 
 if [[ -n "$TMUX" ]]; then
     eval "$(tmux source-file ~/.tmux.conf)"

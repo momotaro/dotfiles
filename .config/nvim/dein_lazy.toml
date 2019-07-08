@@ -127,6 +127,7 @@ repo = 'leafgarland/typescript-vim'
 on_ft = ['typescript', 'typescript.tsx']
 hook_add = """
   autocmd BufRead,BufNewFile *.ts set filetype=typescript expandtab tabstop=2 shiftwidth=2
+  autocmd BufRead,BufNewFile *.tsx set filetype=typescript.tsx expandtab tabstop=2 shiftwidth=2
 
   let g:typescript_compiler_binary = 'tsc'
   let g:typescript_compiler_options = ''
@@ -135,17 +136,14 @@ hook_add = """
   "let g:typescript_opfirst='\%([<>=,?^%|*/&]\|\([-:+]\)\1\@!\|!=\|in\%(stanceof\)\=\>\)'
 """
 
-[[plugins]]
-repo = 'aanari/vim-tsx-pretty'
-on_ft = ['typescript', 'typescript.tsx']
-hook_add = """
-  autocmd BufRead,BufNewFile *.tsx set filetype=typescript expandtab tabstop=2 shiftwidth=2
-"""
-
 # [[plugins]]
-# repo = 'peitalin/vim-jsx-typescript'
+# repo = 'aanari/vim-tsx-pretty'
 # on_ft = ['typescript', 'typescript.tsx']
-# depends = ['vim-tsx-pretty', 'typescript-vim']
+
+[[plugins]]
+repo = 'peitalin/vim-jsx-typescript'
+on_ft = ['typescript', 'typescript.tsx']
+depends = ['typescript-vim']
 
 # linter & formatter
 

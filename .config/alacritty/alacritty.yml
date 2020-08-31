@@ -11,7 +11,7 @@ env:
   # check the local terminfo database and use 'alacritty' if it is
   # available, otherwise 'xterm-256color' is used.
   TERM: xterm-256color
-  WINIT_HIDPI_FACTOR: 1.0
+  WINIT_HIDPI_FACTOR: '1.0'
 
 window:
   # Window dimensions (changes require restart)
@@ -52,7 +52,7 @@ window:
   decorations: full
 
   # When true, alacritty starts maximized.
-  start_maximized: true
+  #start_maximized: true
 
 scrolling:
   # Maximum number of lines in the scrollback buffer.
@@ -70,19 +70,7 @@ scrolling:
   # to allow mouse scrolling for applications like `man`.
   #
   # Specifying `0` will disable faux scrolling.
-  faux_multiplier: 0
-
-  # Scroll to the bottom when new text is written to the terminal.
-  auto_scroll: false
-
-# Spaces per Tab (changes require restart)
-#
-# This setting defines the width of a tab in cells.
-#
-# Some applications, like Emacs, rely on knowing about the width of a tab.
-# To prevent unexpected behavior in these applications, it's also required to
-# change the `it` value in terminfo when altering this setting.
-tabspaces: 4
+  multiplier: 0
 
 # Font configuration (changes require restart)
 font:
@@ -137,10 +125,11 @@ font:
   use_thin_strokes: true
 
 # Display the time it takes to redraw each frame.
-render_timer: false
+debug:
+  render_timer: false
 
-# Keep the log file after quitting Alacritty.
-persistent_logging: false
+  # Keep the log file after quitting Alacritty.
+  persistent_logging: false
 
 # If `true`, bold text is drawn using the bright color variants.
 draw_bold_text_with_bright_colors: true
@@ -265,10 +254,10 @@ colors:
 #   - Linear
 #
 # Specifying a `duration` of `0` will disable the visual bell.
-visual_bell:
-  animation: EaseOutExpo
-  duration: 0
-  color: '0xffffff'
+# visual_bell:
+  # animation: EaseOutExpo
+  # duration: 0
+  # color: '0xffffff'
 
 # Background opacity
 #

@@ -7,7 +7,6 @@
       "initializationOptions": {
         "diagnosticsEnabled": true,
         "formatTool": "goimports",
-        "lintTool": "golint",
       }
     },
     "dockerfile": {

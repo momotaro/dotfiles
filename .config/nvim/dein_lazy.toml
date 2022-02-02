@@ -85,8 +85,8 @@ hook_add = """
   autocmd BufNewFile,BufRead *.js set filetype=javascript tabstop=2 shiftwidth=2
   autocmd BufNewFile,BufRead *.es6 set filetype=javascript tabstop=2 shiftwidth=2
 
-  let g:ale_fixers['javascript'] = ['prettier-eslint']
-  let g:ale_javascript_prettier_use_local_config = 1
+  " let g:ale_fixers['javascript'] = ['prettier-eslint']
+  " let g:ale_javascript_prettier_use_local_config = 1
 """
 
 [[plugins]]
@@ -213,17 +213,23 @@ hook_add = """
 
 # Golang
 #-----------------------------------
-
-[[plugins]]
-repo = 'fatih/vim-go'
+repo = 'mattn/vim-goimports'
 on_ft = ['go']
-hook_add = '''
-  autocmd BufRead,BufNewFile *.go set filetype=go tabstop=4 shiftwidth=4
+hook_add = """
+  let g:goimports = 1
+  let g:goimports_simplify = 1
+"""
+# [[plugins]]
+# repo = 'fatih/vim-go'
+# on_ft = ['go']
+# hook_add = '''
+  # autocmd BufRead,BufNewFile *.go set filetype=go tabstop=4 shiftwidth=4
+  # " autocmd BufWritePre *.go :call CocAction('organizeImport')
 
-  " LSPに任せる機能をOFFにする
-  let g:go_def_mapping_enabled = 0
-  let g:go_doc_keywordprg_enabled = 0
-'''
+  # " LSPに任せる機能をOFFにする
+  # let g:go_def_mapping_enabled = 0
+  # let g:go_doc_keywordprg_enabled = 0
+# '''
 
 # Haskell
 #-----------------------------------

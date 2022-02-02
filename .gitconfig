@@ -12,3 +12,12 @@
     stt = status -uno
     # 行ごとの差分じゃなくて，単語レベルでの差分を色付きで表示する
     difff = diff --word-diff
+    # マージ済みのブランチを全て削除
+    delete-merged-branch = !git branch --merged | egrep -v '\\*|master|development' | xargs git branch -d
+[user]
+	name = momotaro
+	email = m.taro.773@gmail.com
+
+
+[url "git@bitbucket.org:"]
+	insteadOf = https://bitbucket.org/

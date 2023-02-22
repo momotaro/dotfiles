@@ -112,6 +112,9 @@ hook_add = """
   " Use K for show documentation in preview window
   nnoremap <silent> K :call <SID>show_documentation()<CR>
 
+  inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm() : "\<CR>"
+  inoremap <silent><expr> <c-f> coc#pum#visible() ? coc#pum#confirm() : "\<RIGHT>"
+
   function! s:show_documentation()
     if &filetype == 'vim'
       execute 'h '.expand('<cword>')

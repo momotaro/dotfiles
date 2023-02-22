@@ -11,6 +11,16 @@
       "filetypes": ["go"]
     }
   },
+  "terraform": {
+    "command": "terraform-ls",
+    "args": ["serve"],
+    "filetypes": [
+      "terraform",
+      "tf"
+    ],
+    "initializationOptions": {},
+    "settings": {}
+  },
   "suggest.noselect": false,
   "suggest.preferCompleteThanJumpPlaceholder": true,
   "coc.preferences.formatOnSaveFiletypes": ["go"]

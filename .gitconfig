@@ -1,8 +1,10 @@
 [core]
-    editor = vim
+    editor = nvim
 [alias]
     st = status
     co = checkout
+    cof = !git branch -a | fzf | xargs git checkout
+    f = fetch
     graph = log --graph --date=short --decorate=short --pretty=format:'%Cgreen%h %Creset%cd %Cblue%cn %Cred%d %Creset%s'
     # 上の省略形
     gr = log --graph --date=short --decorate=short --pretty=format:'%Cgreen%h %Creset%cd %Cblue%cn %Cred%d %Creset%s'
@@ -15,9 +17,14 @@
     # マージ済みのブランチを全て削除
     delete-merged-branch = !git branch --merged | egrep -v '\\*|master|development' | xargs git branch -d
 [user]
-	name = momotaro
-	email = m.taro.773@gmail.com
-
+    name = momotaro
+    email = m.taro.773@gmail.com
 
 [url "git@bitbucket.org:"]
-	insteadOf = https://bitbucket.org/
+    insteadOf = https://bitbucket.org/
+[credential]
+    helper = store --file ~/.git_credentials
+[push]
+    default = current
+[pull]
+    rebase = false

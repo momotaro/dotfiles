@@ -122,10 +122,25 @@ hook_add = """
       call CocAction('doHover')
     endif
   endfunction
+
+  " explorer
+  nnoremap <silent> ,ex :CocCommand explorer<CR>
 """
 
 [[plugins]]
 repo = 'junegunn/fzf'
+build = './install.sh --all'
+[[plugins]]
+repo = 'junegunn/fzf.vim'
+hook_add = '''
+  nnoremap ff :GFiles<CR>
+'''
+
+[[plugins]]
+repo = 'antoinemadec/coc-fzf'
+hook_add = '''
+  nnoremap cff :CocFzfList
+'''
 
 #---------------------------------------------------
 # Lintter
@@ -151,133 +166,42 @@ hook_add = '''
 #---------------------------------------------------
 # Project & File manager
 #---------------------------------------------------
-[[plugins]]
-repo = 'scrooloose/nerdtree'
-[[plugins]]
-repo = 'tiagofumo/vim-nerdtree-syntax-highlight'
-[[plugins]]
-repo = 'jistr/vim-nerdtree-tabs'
-hook_add = '''
-  let g:NERDTreeWinSize = 30
-  let g:nerdtree_tabs_open_on_console_startup = 0
-  autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-  nnoremap ,ex :NERDTreeFocusToggle<CR>
+# [[plugins]]
+# repo = 'lambdalisue/fern.vim'
+# [[plugins]]
+# repo = 'lambdalisue/nerdfont.vim'
+# [[plugins]]
+# repo = 'lambdalisue/fern-renderer-nerdfont.vim'
+# hook_add = '''
+  # let g:fern#renderer = 'nerdfont'
+# '''
+# [[plugins]]
+# repo = 'lambdalisue/glyph-palette.vim'
+# hook_add = '''
+  # augroup my-glyph-palette
+    # autocmd! *
+    # autocmd FileType fern call glyph_palette#apply()
+    # autocmd FileType nerdtree,startify call glyph_palette#apply()
+  # augroup END
+# '''
 
-  let g:NERDTreeExactMatchHighlightColor = {}
-  let g:NERDTreeExactMatchHighlightColor['.gitignore'] = 'F54D27'
-'''
 
-[[plugins]]
-repo = 'Shougo/denite.nvim'
-hook_add = """
-  let s:menus = {}
-  let s:menus.file = {'description': 'File search (buffer, file, file_rec, file_mru'}
-  let s:menus.line = {'description': 'Line search (change, grep, line, tag'}
-  let s:menus.others = {'description': 'Others (command, command_history, help)'}
-  let s:menus.file.command_candidates = [
-        \ ['buffer', 'Denite buffer'],
-        \ ['file: Files in the current directory', 'Denite file'],
-        \ ['file_rec: Files, recursive list under the current directory', 'Denite file_rec'],
-        \ ['file_mru: Most recently used files', 'Denite file_mru']
-        \ ]
-  let s:menus.line.command_candidates = [
-        \ ['change', 'Denite change'],
-        \ ['grep :grep', 'Denite grep'],
-        \ ['line', 'Denite line'],
-        \ ['tag', 'Denite tag']
-        \ ]
-  let s:menus.others.command_candidates = [
-        \ ['command', 'Denite command'],
-        \ ['command_history', 'Denite command_history'],
-        \ ['help', 'Denite help']
-        \ ]
 
-  " call denite#custom#var('menu', 'menus', s:menus)
+# [[plugins]]
+# repo = 'scrooloose/nerdtree'
+# [[plugins]]
+# repo = 'tiagofumo/vim-nerdtree-syntax-highlight'
+# [[plugins]]
+# repo = 'jistr/vim-nerdtree-tabs'
+# hook_add = '''
+  # let g:NERDTreeWinSize = 30
+  # let g:nerdtree_tabs_open_on_console_startup = 0
+  # autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+  # nnoremap ,ex :NERDTreeFocusToggle<CR>
 
-  nnoremap [denite] <Nop>
-  nmap ,, [denite]
-  nnoremap <silent> [denite]b :Denite buffer<CR>
-  nnoremap <silent> [denite]c :Denite changes<CR>
-  nnoremap <silent> [denite]f :Denite file<CR>
-  nnoremap <silent> [denite]g :Denite grep<CR>
-  nnoremap <silent> [denite]h :Denite help<CR>
-  nnoremap <silent> [denite]l :Denite line<CR>
-  nnoremap <silent> [denite]t :Denite tag<CR>
-  nnoremap <silent> [denite]m :Denite file_mru<CR>
-  nnoremap <silent> [denite]u :Denite menu<CR>
-
-  call denite#custom#map(
-        \ 'insert',
-        \ '<Down>',
-        \ '<denite:move_to_next_line>',
-        \ 'noremap'
-        \)
-  call denite#custom#map(
-        \ 'insert',
-        \ '<Up>',
-        \ '<denite:move_to_previous_line>',
-        \ 'noremap'
-        \)
-  call denite#custom#map(
-        \ 'insert',
-        \ '<C-N>',
-        \ '<denite:move_to_next_line>',
-        \ 'noremap'
-        \)
-  call denite#custom#map(
-        \ 'insert',
-        \ '<C-P>',
-        \ '<denite:move_to_previous_line>',
-        \ 'noremap'
-        \)
-  call denite#custom#map(
-        \ 'insert',
-        \ '<C-G>',
-        \ '<denite:assign_next_txt>',
-        \ 'noremap'
-        \)
-  call denite#custom#map(
-        \ 'insert',
-        \ '<C-T>',
-        \ '<denite:assign_previous_line>',
-        \ 'noremap'
-        \)
-  call denite#custom#map(
-        \ 'normal',
-        \ '/',
-        \ '<denite:enter_mode:insert>',
-        \ 'noremap'
-        \)
-  call denite#custom#map(
-        \ 'insert',
-        \ '<Esc>',
-        \ '<denite:enter_mode:normal>',
-        \ 'noremap'
-        \)
-
-  call denite#custom#filter('matcher_ignore_globs', 'ignore_globs', [
-              \ '.git/', 'build/', '.gradle/', 'node_modules/', '__pycache__/',
-              \ 'images/', '*.o', '*.make', '*.min.*',
-              \ 'img/', 'fonts/', '*~', '*.exe', '*.bak',
-              \ '.DS_Store', '*.pyc', '*.class', 'tags', '*.lock',
-              \ '*.log', 'logs/*'
-              \ ])
-
-  " grep
-  "------------------------
-  function! g:GetVisualWord() abort
-    let word = getline("'<")[getpos("'<")[2] - 1:getpos("'>")[2] - 1]
-    return word
-  endfunction
-
-	function! g:GetVisualWordEscape() abort
-    let word = substitute(GetVisualWord(), '\\', '\\\\', 'g')
-    let word = substitute(word, '[.?*+^$|()[\]]', '\\\0', 'g')
-    return word
-	endfunction
-
-  xnoremap <silent> ,fg :Denite grep:::`GetVisualWordEscape()`<CR>
-"""
+  # let g:NERDTreeExactMatchHighlightColor = {}
+  # let g:NERDTreeExactMatchHighlightColor['.gitignore'] = 'F54D27'
+# '''
 
 [[plugins]]
 repo = 'itchyny/lightline.vim'

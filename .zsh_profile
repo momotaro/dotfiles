@@ -1,7 +1,26 @@
 alias ll='ls -l'
 alias vim=nvim
+alias docker-compose='docker compose'
+alias pbcopy='xclip -selection clipboard'
+alias pbpaste='xclip -selection clipboard -o'
+alias en2ja='trans -b en:ja'
+alias ja2en='trans -b ja:en'
 
-eval "$(anyenv init -)"
+if type /home/linuxbrew/.linuxbrew/bin/brew > /dev/null; then
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+fi
+
+if type /opt/homebrew/bin/brew > /dev/null; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
+
+if type anyenv > /dev/null; then
+  eval "$(anyenv init -)"
+fi
+
+if type direnv > /dev/null; then
+  eval "$(direnv hook zsh)"
+fi
 
 if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
   source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"

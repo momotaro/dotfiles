@@ -1,4 +1,5 @@
 export LANG=ja_JP.UTF-8
+bindkey -d
 
 HISTFILE=$HOME/.zsh-history # 履歴の保存先
 HISTSIZE=100000             # メモリに展開する履歴の数
@@ -14,11 +15,11 @@ if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
 fi
 
 # Vi モード
-set -o vi
+bindkey -v
 bindkey '^p' history-beginning-search-backward
 bindkey '^n' history-beginning-search-forward
-bindkey '^r' history-incremental-pattern-search-backward
-bindkey '^s' history-incremental-pattern-search-forward
+# bindkey '^r' history-incremental-pattern-search-backward
+# bindkey '^s' history-incremental-pattern-search-forward
 
 # スクリーンロックのショートカットを解除
 stty stop undef
@@ -78,6 +79,10 @@ zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 # ファイル名の展開で辞書順ではなく数値的にソート
 setopt numeric_glob_sort
 
+source ~/.zsh_profile
+source ~/.zshenv
+# source $HOME/.zsh-vi-mode/zsh-vi-mode.plugin.zsh
+
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 export FZF_DEFAULT_COMMAND='rg --files --hidden --glob "!.git/*"'
 export FZF_DEFAULT_OPTS='--height 40% --reverse --border'
@@ -86,7 +91,7 @@ function fzf_search_file() {
   find . | fzf
 }
 zle -N fzf_search_file
-bindkey '^F' fzf_search_file
+bindkey '' fzf_search_file
 
 function fzf_select_history() {
   BUFFER=$(history -n -r 1 | fzf --no-sort +m --query "$LBUFFER" --prompt="History > ")
@@ -101,10 +106,3 @@ fi
 
 # Open
 [ `uname` = "Linux" ] && alias open='xdg-open 2>/dev/null'
-
-#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
-export SDKMAN_DIR="/home/momotaro/.sdkman"
-[[ -s "/home/momotaro/.sdkman/bin/sdkman-init.sh" ]] && source "/home/momotaro/.sdkman/bin/sdkman-init.sh"
-
-source ~/.zsh_profile
-source ~/.zshenv

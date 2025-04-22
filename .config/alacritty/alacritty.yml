@@ -10,7 +10,7 @@ env:
   # each instance of Alacritty. If it is not present, alacritty will
   # check the local terminfo database and use 'alacritty' if it is
   # available, otherwise 'xterm-256color' is used.
-  TERM: xterm-256color
+  TERM: alacritty
   WINIT_HIDPI_FACTOR: '1.0'
 
 window:
@@ -63,32 +63,23 @@ scrolling:
   # scrollback is enabled (history > 0).
   multiplier: 3
 
-  # Faux Scrolling
-  #
-  # The `faux_multiplier` setting controls the number of lines the terminal
-  # should scroll when the alternate screen buffer is active. This is used
-  # to allow mouse scrolling for applications like `man`.
-  #
-  # Specifying `0` will disable faux scrolling.
-  multiplier: 0
-
 # Font configuration (changes require restart)
 font:
   # Normal (roman) font face
   normal:
-    family: Fira Code
+    family: FiraCode Nerd Font
     # The `style` can be specified to pick a specific face.
     style: Retina
 
   # Bold font face
   bold:
-    family: Fira Code
+    family: FiraCode Nerd Font
     # The `style` can be specified to pick a specific face.
     style: Bold
 
   # Italic font face
   italic:
-    family: Fira Code
+    family: FiraCode Nerd Font
     # The `style` can be specified to pick a specific face.
     style: Italic
 

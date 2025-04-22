@@ -1,27 +1,14 @@
 {
-  "languageserver": {
-    "dockerfile": {
-      "command": "docker-langserver",
-      "filetypes": ["dockerfile"],
-      "args": ["--stdio"]
-    },
-    "golang": {
-      "command": "gopls",
-      "rootPatterns": ["go.mod", ".vim/", ".git/", ".hg/"],
-      "filetypes": ["go"]
+    "languageserver": {
+        "terraform": {
+            "command": "terraform-ls",
+            "args": ["serve"],
+            "filetypes": ["terraform", "tf"],
+            "initializationOptions": {},
+            "settings": {}
+        },
+        "suggest.noselect": false,
+        "suggest.preferCompleteThanJumpPlaceholder": true,
+        "coc.preferences.formatOnSaveFiletypes": ["go"]
     }
-  },
-  "terraform": {
-    "command": "terraform-ls",
-    "args": ["serve"],
-    "filetypes": [
-      "terraform",
-      "tf"
-    ],
-    "initializationOptions": {},
-    "settings": {}
-  },
-  "suggest.noselect": false,
-  "suggest.preferCompleteThanJumpPlaceholder": true,
-  "coc.preferences.formatOnSaveFiletypes": ["go"]
 }

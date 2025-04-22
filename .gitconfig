@@ -21,7 +21,7 @@
     email = m.taro.773@gmail.com
 
 [url "git@bitbucket.org:"]
-    insteadOf = https://bitbucket.org/
+	insteadOf = https://bitbucket.org/
 [credential]
     helper = store --file ~/.git_credentials
 [push]

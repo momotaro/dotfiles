@@ -85,7 +85,7 @@ source ~/.zshenv
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 export FZF_DEFAULT_COMMAND='rg --files --hidden --glob "!.git/*"'
-export FZF_DEFAULT_OPTS='--height 40% --reverse --border'
+export FZF_DEFAULT_OPTS='--height 40% --reverse --border --delimiter : --preview "bat --color=always --style=header,grid --line-range :500 {}"'
 
 function fzf_search_file() {
   find . | fzf
@@ -106,3 +106,8 @@ fi
 
 # Open
 [ `uname` = "Linux" ] && alias open='xdg-open 2>/dev/null'
+# The following lines have been added by Docker Desktop to enable Docker CLI completions.
+fpath=(/Users/momotaro/.docker/completions $fpath)
+autoload -Uz compinit
+compinit
+# End of Docker CLI completions

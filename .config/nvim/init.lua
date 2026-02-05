@@ -1,3 +1,10 @@
+vim.keymap.set(
+  'n', ',,sc',
+  function() vim.cmd('source ~/.config/nvim/init.lua') end,
+  { noremap = true, silent = true }
+)
+
+local home_dir = os.getenv("HOME")
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 
 if not vim.loop.fs_stat(lazypath) then
@@ -12,8 +19,10 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-plugins = require('plugins')
+local plugins = require('plugins')
 require('lazy').setup(plugins)
+
+require('golang')
 
 -- 基本的な設定
 -- ----------------------------------------------------
@@ -54,8 +63,7 @@ vim.opt.backspace = 'indent,eol,start'
 -- vim.opt.expandtab = true -- 後でファイルタイプごとに設定
 
 -- 新しい行を開始したときに、新しい行のインデントを現在行と同じ量にする。
-vim.opt.smartindent = true
-vim.opt.autoindent = true
+-- （インデント設定は下部の「Configure filetype」セクションで一括設定）
 
 -- 行数表示
 -- vim.opt.nu = true -- 後で必要に応じて設定
@@ -69,10 +77,10 @@ vim.opt.helplang = 'ja'
 
 -- バックアップ関係
 -- ----------------------------------------------------
-vim.opt.swapfile = false
--- vim.opt.directory = "~/.vim_swap"
-vim.opt.undofile = false
-vim.opt.undodir = "~/.vim_undofile"
+vim.opt.swapfile = true
+vim.opt.directory = home_dir .. "/.vim_swap"
+vim.opt.undofile = true
+vim.opt.undodir = home_dir .. "/.vim_undofile"
 -- vim.opt.backup = true
 -- vim.opt.backupdir = "~/.backup"
 
@@ -97,12 +105,9 @@ vim.opt.title = true
 vim.opt.number = false -- 後で必要に応じて設定
 -- ルーラーを表示
 vim.opt.ruler = true
--- タブ文字を CTRL-I で表示し、行末に $ で表示する
-vim.opt.list = true
 -- 入力中のコマンドをステータスに表示する
 vim.opt.showcmd = true
--- ステータスラインを常に表示
-vim.opt.laststatus = 2
+-- ステータスラインを常に表示（グローバルステータスライン: 上部で laststatus=3 に設定済み）
 -- 括弧入力時の対応する括弧を表示
 vim.opt.showmatch = true
 -- 対応する括弧の表示時間を2にする
@@ -143,7 +148,7 @@ vim.api.nvim_create_autocmd('BufWritePre', {
   callback = function()
     local filepath = vim.fn.expand('%:p')
     local dir = vim.fn.fnamemodify(filepath, ':h')
-    if not vim.fn.isdirectory(dir) then
+    if vim.fn.isdirectory(dir) == 0 then
       vim.fn.mkdir(dir, 'p')
       vim.notify(string.format('Created directory: %s', dir), vim.log.levels.INFO, {})
     end
@@ -160,8 +165,6 @@ vim.keymap.set('n', ':', ';', { noremap = true })
 -- Key map for Insert mode
 -- ------------------------------------
 -- Emacs like
-vim.keymap.set('i', '<C-p>', '<Up>', { silent = true })
-vim.keymap.set('i', '<C-n>', '<Down>', { silent = true })
 vim.keymap.set('i', '<C-b>', '<Left>', { silent = true })
 vim.keymap.set('i', '<C-f>', '<Right>', { silent = true })
 -- Etc
@@ -197,7 +200,7 @@ vim.cmd('highlight StatusLine term=NONE cterm=NONE ctermfg=black ctermbg=white')
 vim.api.nvim_create_autocmd({'BufNewFile', 'BufRead'}, { pattern = '*.pcss', command = 'set filetype=postcss' })
 
 vim.opt.list = true
-vim.opt.listchars = 'tab:>-', 'trail:*', 'nbsp:+'
+vim.opt.listchars = 'tab:>-,trail:*,nbsp:+'
 
 -- eregex(検索、置換でRubyの正規表現が可能)
 -- ----------------------------------------------------
@@ -219,7 +222,7 @@ for n = 1, 9 do
 end
 
 -- Yanking
-vim.opt.viminfo:append '!'
+vim.opt.shada:append '!'
 
 -- ESCの2回押しでハイライト消去
 vim.keymap.set('n', '<ESC><ESC>', ':nohlsearch<CR><ESC>', { silent = true })
@@ -268,10 +271,6 @@ vim.keymap.set('t', '<ESC>', '<C-\\><C-n>', { silent = true })
 -- Plugins
 -- ----------------------------------------
 
-if vim.o.compatible then
-  vim.o.nocompatible = true
-end
-
 vim.cmd('filetype plugin indent on')
 vim.cmd('syntax enable')
 
@@ -285,23 +284,6 @@ vim.api.nvim_create_autocmd('FileType', {
 -- --------------------------------------------
 -- Configure filetype
 -- --------------------------------------------
-
--- Golang
--- --------------------------------------------
-vim.api.nvim_create_autocmd('BufWritePre', {
-  pattern = '*.go',
-  callback = function() vim.cmd('silent call CocAction(\'runCommand\', \'editor.action.organizeImport\')') end,
-})
-
-vim.api.nvim_create_autocmd('FileType', {
-  pattern = 'go',
-  callback = function()
-    vim.keymap.set('n', ',A', ':CocCommand go.test.toggle<CR>', { noremap = true, silent = true })
-    vim.keymap.set('n', 'gtj', ':CocCommand go.tags.add json<CR>', { noremap = true })
-    vim.keymap.set('n', 'gty', ':CocCommand go.tags.add yaml<CR>', { noremap = true })
-    vim.keymap.set('n', 'gtx', ':CocCommand go.tags.clear<CR>', { noremap = true })
-  end,
-})
 
 -- indent
 -- --------------------------------------------
@@ -322,14 +304,12 @@ if vim.fn.has('autocmd') then
   vim.cmd('filetype indent on')
   -- sw=shiftwidth, sts=softtabstop, ts=tabstop, et=expandtabの略
   vim.api.nvim_create_autocmd('FileType', { pattern = 'c', command = 'setlocal sw=4 sts=4 ts=4 noexpandtab' })
-  vim.api.nvim_create_autocmd('FileType', { pattern = 'go', command = 'setlocal sw=4 sts=4 ts=4 noexpandtab' })
   vim.api.nvim_create_autocmd('FileType', { pattern = 'html', command = 'setlocal sw=4 sts=4 ts=4 expandtab' })
   vim.api.nvim_create_autocmd('FileType', { pattern = 'ruby', command = 'setlocal sw=2 sts=2 ts=2 expandtab' })
   vim.api.nvim_create_autocmd('FileType', { pattern = 'zsh', command = 'setlocal sw=2 sts=2 ts=2 expandtab' })
   vim.api.nvim_create_autocmd('FileType', { pattern = 'python', command = 'setlocal sw=4 sts=4 ts=4 expandtab' })
   vim.api.nvim_create_autocmd('FileType', { pattern = 'scala', command = 'setlocal sw=4 sts=4 ts=4 expandtab' })
   vim.api.nvim_create_autocmd('FileType', { pattern = 'json', command = 'setlocal sw=2 sts=2 ts=2 expandtab' })
-  vim.api.nvim_create_autocmd('FileType', { pattern = 'html', command = 'setlocal sw=4 sts=4 ts=4 expandtab' }) -- 重複
   vim.api.nvim_create_autocmd('FileType', { pattern = 'css', command = 'setlocal sw=2 sts=2 ts=2 expandtab' })
   vim.api.nvim_create_autocmd('FileType', { pattern = 'scss', command = 'setlocal sw=2 sts=2 ts=2 expandtab' })
   vim.api.nvim_create_autocmd('FileType', { pattern = 'sass', command = 'setlocal sw=2 sts=2 ts=2 expandtab' })
@@ -358,7 +338,7 @@ vim.keymap.set('i', '<C-Space>', '<C-x><C-o>')
 vim.g.toggle_window_size = 0
 local function toggle_window_size()
   if vim.g.toggle_window_size == 1 then
-    vim.cmd.normal '<C-w>='
+    vim.cmd('wincmd =')
     vim.g.toggle_window_size = 0
   else
     vim.cmd('resize')
@@ -367,3 +347,23 @@ local function toggle_window_size()
   end
 end
 vim.keymap.set('n', 'M', toggle_window_size, { noremap = true })
+
+-- Clipboard operations (replacing vim-fakeclip)
+-- --------------------------------------------
+vim.keymap.set('n', 'cyy', '"+yy', { silent = true, noremap = true, desc = 'Copy line to clipboard' })
+vim.keymap.set('n', 'cp', '"+p', { silent = true, noremap = true, desc = 'Paste from clipboard' })
+vim.keymap.set('v', ',cy', '"+y', { silent = true, noremap = true, desc = 'Copy selection to clipboard' })
+
+-- Copy path (replacing copypath.vim)
+-- --------------------------------------------
+vim.keymap.set('n', ',cp', function()
+  local path = vim.fn.expand('%:p')
+  vim.fn.setreg('+', path)
+  print('Copied: ' .. path)
+end, { silent = true, noremap = true, desc = 'Copy full path' })
+
+vim.keymap.set('n', ',cf', function()
+  local filename = vim.fn.expand('%:t')
+  vim.fn.setreg('+', filename)
+  print('Copied: ' .. filename)
+end, { silent = true, noremap = true, desc = 'Copy filename' })

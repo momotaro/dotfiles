@@ -3,3 +3,4 @@ pack/
 package.json
 yarn.lock
 .claude/
+.zshenv.local

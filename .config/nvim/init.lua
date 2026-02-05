@@ -25,6 +25,7 @@ require('golang')
 -- 基本設定
 -- ============================================
 vim.g.loaded_perl_provider = 0
+vim.g.python3_host_prog = home_dir .. "/.anyenv/envs/pyenv/versions/neovim3/bin/python"
 
 vim.opt.laststatus = 3
 vim.opt.cmdheight = 0

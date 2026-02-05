@@ -5,7 +5,7 @@ HISTFILE=$HOME/.zsh-history # 履歴の保存先
 HISTSIZE=100000             # メモリに展開する履歴の数
 SAVEHIST=100000             # 保存する履歴の数
 
-TERM=screen-256color
+# TERM はターミナル/tmux に任せる（Alacritty: alacritty, tmux: screen-256color）
 autoload -U colors
 colors
 
@@ -58,6 +58,12 @@ setopt extended_history
 ## 同一ホストで動いているzshで履歴を共有
 setopt share_history
 
+## 履歴の重複排除
+setopt hist_ignore_dups      # 直前と同じコマンドは履歴に入れない
+setopt hist_ignore_all_dups  # 重複する古い履歴を削除
+setopt hist_ignore_space     # スペースで始まるコマンドは履歴に残さない
+setopt hist_reduce_blanks    # 余分な空白を削除して記録
+
 ## ディレクトリスタックを保存
 setopt auto_pushd
 
@@ -83,12 +89,36 @@ source ~/.zsh_profile
 source ~/.zshenv
 # source $HOME/.zsh-vi-mode/zsh-vi-mode.plugin.zsh
 
+# Vi モードのカーソル形状変更（ノーマル: ブロック █、挿入: ビーム |）
+export KEYTIMEOUT=1
+function _cursor_keymap_select {
+  if [[ $KEYMAP == vicmd ]]; then
+    echo -ne '\e[2 q'
+  else
+    echo -ne '\e[6 q'
+  fi
+}
+function zle-keymap-select {
+  zle editor-info
+  _cursor_keymap_select
+}
+zle -N zle-keymap-select
+function zle-line-init {
+  zle editor-info
+  echo -ne '\e[6 q'
+}
+zle -N zle-line-init
+
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 export FZF_DEFAULT_COMMAND='rg --files --hidden --glob "!.git/*"'
 export FZF_DEFAULT_OPTS='--height 40% --reverse --border --delimiter : --preview "bat --color=always --style=header,grid --line-range :500 {}"'
 
 function fzf_search_file() {
-  find . | fzf
+  local file=$(fd --type f --hidden --exclude .git | fzf --preview 'bat --color=always --style=header,grid --line-range :300 {}')
+  if [[ -n "$file" ]]; then
+    BUFFER="vim $file"
+    zle accept-line
+  fi
 }
 zle -N fzf_search_file
 bindkey '' fzf_search_file
@@ -100,17 +130,10 @@ function fzf_select_history() {
 zle -N fzf_select_history
 bindkey '^r' fzf_select_history
 
-if [[ -n "$TMUX" ]]; then
-    eval "$(tmux source-file ~/.tmux.conf)"
-fi
-
 # Open
 [ `uname` = "Linux" ] && alias open='xdg-open 2>/dev/null'
-# The following lines have been added by Docker Desktop to enable Docker CLI completions.
+# Docker CLI completions
 fpath=(/Users/momotaro/.docker/completions $fpath)
-autoload -Uz compinit
-compinit
-# End of Docker CLI completions
 
 # Added by Antigravity
 export PATH="/Users/momotaro/.antigravity/antigravity/bin:$PATH"
@@ -122,3 +145,8 @@ case ":$PATH:" in
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 # pnpm end
+
+# zoxide（頻度ベースのディレクトリ移動: z foo で移動）
+if type zoxide > /dev/null 2>&1; then
+  eval "$(zoxide init zsh)"
+fi

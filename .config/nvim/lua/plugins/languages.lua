@@ -16,6 +16,7 @@ return {
     ---@type render.md.UserConfig
     opts = {
       file_types = { "markdown", "md", "AgenticChat" },
+      latex = { enabled = false },
     }
   },
 
